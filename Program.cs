@@ -132,7 +132,7 @@ namespace Academy._Requests
                     await GetTheLongestPost();
                     break;
                 case "6":
-                    await GetCommentsWithEmailDomain();
+                    await GetCommentsWithEmailDomain("@vance.io");
                     break;
                 default:
                     Console.WriteLine("Некорректный ввод, попробуйте снова.");
@@ -311,7 +311,7 @@ namespace Academy._Requests
             }
         }
        
-        static async Task GetCommentsWithEmailDomain()
+        static async Task GetCommentsWithEmailDomain(string emailDomain)
         {
             using (HttpClient client = new HttpClient())
             {
@@ -321,7 +321,7 @@ namespace Academy._Requests
                 {
                     string json = await response.Content.ReadAsStringAsync();
                     List<Comment> comments = JsonConvert.DeserializeObject<List<Comment>>(json);
-                    var filteredComments = comments.Where(c => c.Email.EndsWith("@vance.io"));
+                    var filteredComments = comments.Where(c => c.Email.EndsWith(emailDomain));
                     foreach (var comment in filteredComments)
                     {
                         Console.WriteLine($"Email: {comment.Email}  PostId: {comment.PostId}  ");
@@ -330,6 +330,7 @@ namespace Academy._Requests
                 }
             }
         }
+        
         /*
          1. Получение всех пользователей и их сортировка по алфавиту
          2. Найти самый длинный пост
